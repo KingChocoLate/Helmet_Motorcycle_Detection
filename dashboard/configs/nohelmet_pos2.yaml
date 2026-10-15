@@ -1,0 +1,24 @@
+# Only change from baseline: positive BCE term for NoHelmet is doubled.
+stage: baseline
+epochs: 100
+patience: 100
+imgsz: 960
+batch: 16
+workers: 4
+optimizer: AdamW
+lr0: 0.001
+lrf: 0.01
+weight_decay: 0.0005
+warmup_epochs: 3
+deterministic: true
+amp: true
+fliplr: 0.5
+scale: 0.5
+mosaic: 1.0
+close_mosaic: 10
+cls_pw: 0.0
+plots: true
+positive_weights:
+- 1.0
+- 1.0
+- 2.0

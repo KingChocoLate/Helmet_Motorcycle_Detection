@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Motorcycle helmet detection</title>
+  <link rel="stylesheet" href="/static/style.css?v=readable6">
+  <script src="/static/app.js?v=readable6" defer></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="brand"><span class="mark" aria-hidden="true">H</span><div><strong>Motorcycle helmet detection</strong><span>ITC · Cambodian traffic</span></div></div>
+    <div class="header-actions"><span id="model-state" class="pill">Checking model…</span></div>
+  </header>
+  <div id="notice" role="alert" class="notice" hidden></div>
+  <main id="inspect" class="panel">
+    <div class="workspace">
+      <aside class="controls">
+        <section class="card"><h2>Input</h2>
+          <label for="mode">Input type</label><select id="mode"><option value="image">Still image</option><option value="video">Recorded video</option><option value="camera">Browser camera</option></select>
+          <div id="file-control"><label for="source">Image or video file</label><input id="source" type="file" accept="image/*"><p class="hint" id="file-hint">JPG, PNG or WebP · up to 16 MB</p></div>
+          <p id="camera-hint" class="hint" hidden>Localhost or HTTPS required.</p>
+          <details><summary>Detection settings</summary>
+            <label for="display-conf">Box display confidence <output id="display-value">0.45</output></label><input id="display-conf" type="range" min="0.1" max="0.95" step="0.05" value="0.45">
+            <label for="candidate-conf">NoHelmet capture confidence <output id="candidate-value">0.60</output></label><input id="candidate-conf" type="range" min="0.1" max="0.95" step="0.05" value="0.6">
+            <p class="hint">Video capture: 5 consecutive frames · once per track.</p>
+          </details>
+          <button id="run" class="primary" disabled>Analyze image <span aria-hidden="true">↗</span></button><button id="stop" class="secondary" disabled>Stop processing</button>
+        </section>
+        <section class="card model-card"><h2>Model</h2><p id="model-name">No checkpoint loaded</p><p id="model-details" class="hint"></p>
+          <details><summary>Change model</summary><label for="weights-file">Checkpoint (.pt)</label><input id="weights-file" type="file" accept=".pt">
+          <button id="load-weights" class="secondary">Load selected weights</button>
+          <button id="default-weights" class="secondary">Use default weights</button>
+          <p id="weights-message" class="hint" role="status" aria-live="polite"></p></details>
+        </section>
+        <section class="card"><h2>Recent runs</h2><div id="history" class="history"><p class="hint">No saved runs yet.</p></div></section>
+      </aside>
+      <div class="review-space">
+        <section class="card viewer-card">
+          <div class="viewer-header"><div><h2 id="run-name">No footage selected</h2></div><span id="run-state" class="pill">Ready</span></div>
+          <div id="viewer-surface" class="viewer-surface">
+          <div class="view-tools"><span id="view-hint">Ready</span><button id="toggle-preview" class="view-button" aria-pressed="false" hidden>Show processing preview</button><button id="expand-view" class="view-button" disabled aria-label="Enlarge footage" aria-pressed="false">Full display ⛶</button></div>
+          <div class="viewer" id="viewer"><div id="processing-placeholder" hidden><h3>Processing video…</h3><p id="processing-message">Preview hidden</p></div><div id="empty"><h3>No footage selected</h3></div><img id="preview" alt="Detection output" role="button" tabindex="0" hidden><video id="result-video" controls playsinline preload="metadata" hidden></video></div>
+          </div>
+          <div class="viewer-footer"><div class="legend"><span class="bike">BikeWithRider</span><span class="helmet">Helmet</span><span class="nohelmet">NoHelmet</span></div><span id="progress" aria-live="polite">Waiting for input</span></div>
+          <progress id="progress-bar" max="100" value="0" aria-label="Video processing progress" hidden></progress>
+          <p id="run-context" class="run-context" hidden></p><div class="actions"><button id="review-captures" class="text-link" hidden>View captures ↓</button><a id="download-video" class="text-link" hidden>Download annotated video</a><a id="export" class="text-link" hidden>Export results</a></div>
+        </section>
+        <section id="frame-summary" class="reading-row"><div class="card"><h2>Current frame · detections</h2><div id="counts" class="counts"><div><strong>—</strong><span>Motorcycle boxes</span></div><div><strong>—</strong><span>Helmet boxes</span></div><div><strong>—</strong><span>NoHelmet boxes</span></div></div><p class="hint">Detection boxes, not unique people.</p></div></section>
+        <section id="capture-section" class="card candidates"><div class="section-heading"><div><h2>NoHelmet captures <span id="event-count">0</span></h2></div></div><p id="capture-rule" class="hint">Video capture: 5 consecutive frames · once per track.</p><div id="events"><p class="empty-list">No captures yet.</p></div></section>
+      </div>
+    </div>
+  </main>
+  <video id="camera-source" autoplay playsinline muted hidden></video><canvas id="camera-canvas" hidden></canvas>
+  <dialog id="snapshot-dialog"><button id="close-dialog" class="secondary">Close</button><img id="snapshot" alt="Captured motorcycle with a NoHelmet detection"><p id="snapshot-caption"></p></dialog>
+</body>
+</html>

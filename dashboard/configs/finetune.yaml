@@ -1,0 +1,20 @@
+# Start from the Indian-only checkpoint, not the historic mixed-country model.
+stage: finetune
+epochs: 30
+patience: 30
+imgsz: 960
+batch: 16
+workers: 4
+optimizer: AdamW
+lr0: 0.0001
+lrf: 0.01
+weight_decay: 0.0005
+warmup_epochs: 3
+deterministic: true
+amp: true
+fliplr: 0.5
+scale: 0.5
+mosaic: 1.0
+close_mosaic: 10
+cls_pw: 0.0
+plots: true
